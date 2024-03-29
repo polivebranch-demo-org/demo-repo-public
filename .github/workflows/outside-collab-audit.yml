@@ -18,19 +18,19 @@ jobs:
   audit:
     name: Audit
     runs-on: ubuntu-latest
-  steps:
-    - name: Run audit
-      run: |
-        echo "Running audit"
-        
-        REPO="${{ github.repository }}"
-        IFS='/' read -ra ADDR <<< "$REPO"
-        OWNER="${ADDR[0]}"
-        NAME="${ADDR[1]}"
+    steps:
+      - name: Run audit
+        run: |
+          echo "Running audit"
+          
+          REPO="${{ github.repository }}"
+          IFS='/' read -ra ADDR <<< "$REPO"
+          OWNER="${ADDR[0]}"
+          NAME="${ADDR[1]}"
 
-        RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -X POST -d "{
-          \"query\": \"query { repository(owner:\\\"$OWNER\\\" name:\\\"$NAME\\\") { collaborators(affiliation:OUTSIDE first:100) { nodes { login } } } }\"
-        }" https://api.github.com/graphql)
+          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -X POST -d "{
+            \"query\": \"query { repository(owner:\\\"$OWNER\\\" name:\\\"$NAME\\\") { collaborators(affiliation:OUTSIDE first:100) { nodes { login } } } }\"
+          }" https://api.github.com/graphql)
 
-        LOGINS=$(echo $RESPONSE | jq -r '.data.repository.collaborators.nodes[].login')
-        echo $LOGINS
+          LOGINS=$(echo $RESPONSE | jq -r '.data.repository.collaborators.nodes[].login')
+          echo $LOGINS
