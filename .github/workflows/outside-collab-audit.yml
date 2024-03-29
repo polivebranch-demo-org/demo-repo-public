@@ -41,6 +41,6 @@ jobs:
           BULLETED_LOGINS=$(echo "$LOGINS" | awk '{print "- "$0}')
           
           # Create issue
-          echo "$BULLETED_LOGINS" | gh issue create --title "Outside Collaborator Audit" --body-file -
+          echo "$BULLETED_LOGINS" | gh issue create --assignee polivebranch --assignee jennarutledge --title "Outside Collaborator Audit" --body-file -
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
