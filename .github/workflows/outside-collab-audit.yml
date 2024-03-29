@@ -1,0 +1,36 @@
+name: "Outside Collab Audit"
+
+on:
+  workflow_dispatch:
+  schedule:
+            # ┌────────── minute (0 - 59)
+            # │ ┌────────── hour (0 - 23)
+            # │ │ ┌────────── day of the month (1 - 31)
+            # │ │ │ ┌────────── month (1 - 12)
+            # │ │ │ │ ┌────────── day of the week (0 - 6)
+            # │ │ │ │ │                                  
+            # │ │ │ │ │
+            # │ │ │ │ │
+            # * * * * *
+    - cron: '25 15 * * 2'
+
+jobs:
+  audit:
+    name: Audit
+    runs-on: ubuntu-latest
+  steps:
+    - name: Run audit
+      run: |
+        echo "Running audit"
+        
+        REPO="${{ github.repository }}"
+        IFS='/' read -ra ADDR <<< "$REPO"
+        OWNER="${ADDR[0]}"
+        NAME="${ADDR[1]}"
+
+        RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -X POST -d "{
+          \"query\": \"query { repository(owner:\\\"$OWNER\\\" name:\\\"$NAME\\\") { collaborators(affiliation:OUTSIDE first:100) { nodes { login } } } }\"
+        }" https://api.github.com/graphql)
+
+        LOGINS=$(echo $RESPONSE | jq -r '.data.repository.collaborators.nodes[].login')
+        echo $LOGINS
