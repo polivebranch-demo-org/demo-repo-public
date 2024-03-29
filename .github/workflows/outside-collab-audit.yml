@@ -34,3 +34,9 @@ jobs:
 
           LOGINS=$(echo $RESPONSE | jq -r '.data.repository.collaborators.nodes[].login')
           echo $LOGINS
+
+          # Convert logins to bulleted list
+          BULLETED_LOGINS=$(echo "$LOGINS" | awk '{print "- "$0}')
+          
+          # Create issue
+          echo "$BULLETED_LOGINS" | gh issue create --title "Outside Collaborator Audit" --bodyfile -
