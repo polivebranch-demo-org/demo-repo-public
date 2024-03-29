@@ -40,3 +40,5 @@ jobs:
           
           # Create issue
           echo "$BULLETED_LOGINS" | gh issue create --title "Outside Collaborator Audit" --body-file -
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
