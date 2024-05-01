@@ -2,17 +2,6 @@ name: "Outside Collab Audit"
 
 on:
   workflow_dispatch:
-  schedule:
-            # ┌────────── minute (0 - 59)
-            # │ ┌────────── hour (0 - 23)
-            # │ │ ┌────────── day of the month (1 - 31)
-            # │ │ │ ┌────────── month (1 - 12)
-            # │ │ │ │ ┌────────── day of the week (0 - 6)
-            # │ │ │ │ │                                  
-            # │ │ │ │ │
-            # │ │ │ │ │
-            # * * * * *
-    - cron: '0 0 1 * *'
 
 jobs:
   audit:
